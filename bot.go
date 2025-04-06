@@ -2,34 +2,57 @@ package koreanbotsgo
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
-	"io"
-	"net/http"
 )
 
-// BotFlags는 봇의 플래그입니다.
+// BotFlags는 봇의 플래그 타입입니다.
 type BotFlags int
 
-// Botlib는 봇이 사용하는 라이브러리입니다.
+// Botlib는 봇이 사용하는 라이브러리 타입입니다.
 type BotLib string
 
-// BotState는 한디리에서의 봇 상태입니다.
+// BotState는 한디리에서의 봇 상태 타입입니다.
 type BotState string
 
-// BotStatus는 디스코드에서의 봇 상태입니다.
+// BotStatus는 디스코드에서의 봇 상태 타입입니다.
 type BotStatus string
 
-// BotCategory는 봇의 카테고리입니다.
+// BotCategory는 봇의 카테고리 타입입니다.
 type BotCategory string
 
-// Bot은 한디리 API에서 반환된 봇 데이터입니다.
-type Bot[T any] struct {
+// Bot은 한디리 API에서 반환된 봇 데이터 타입입니다.
+type Bot struct {
 	ID       string        `json:"id"`
 	Name     string        `json:"name"`
 	Tag      string        `json:"tag"`
 	Avatar   string        `json:"avatar"`
-	Owners   []User[T, T]  `json:"owners"`
+	Owners   []UserInBot   `json:"owners"`
+	Flags    BotFlags      `json:"flags"`
+	Lib      BotLib        `json:"lib"`
+	Prefix   string        `json:"prefix"`
+	Votes    int           `json:"votes"`
+	Servers  int           `json:"servers"`
+	Shards   int           `json:"shards"`
+	Intro    string        `json:"intro"`
+	Desc     string        `json:"desc"`
+	Web      string        `json:"web"`
+	Git      string        `json:"git"`
+	Url      string        `json:"url"`
+	Discord  string        `json:"discord"`
+	Category []BotCategory `json:"Category"`
+	Vanity   string        `json:"vanity"`
+	Bg       string        `json:"bg"`
+	Banner   string        `json:"banner"`
+	Status   BotStatus     `json:"status"`
+	State    BotState      `json:"state"`
+}
+
+// BotInUser는 User 구조체안에서의 Bot 구조체입니다.
+type BotInUser struct {
+	ID       string        `json:"id"`
+	Name     string        `json:"name"`
+	Tag      string        `json:"tag"`
+	Avatar   string        `json:"avatar"`
+	Owners   []string      `json:"owners"`
 	Flags    BotFlags      `json:"flags"`
 	Lib      BotLib        `json:"lib"`
 	Prefix   string        `json:"prefix"`
@@ -107,40 +130,12 @@ const (
 )
 
 // Bot의 정보를 갖고옵니다.
-func (k *Koreanbots) Bot(id string) (bot *Bot[string], err error) {
-	var data ResponseBody
-	req, err := http.NewRequest(http.MethodGet, API_URL+"/bots/"+id, nil)
+func (k *Koreanbots) Bot(id string) (bot *Bot, err error) {
+	resp, err := get(k.Client, "/bots/"+id, []map[string]string{})
 	if err != nil {
 		return
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-
-	resp, err := k.Client.Do(req)
-	if err != nil {
-		return
-	}
-
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(body, &data)
-	if err != nil {
-		return
-	}
-
-	if data.Code != 200 {
-		err = errors.New(fmt.Sprintf("Http Status Code: %d, Message: %s", data.Code, string(data.Message)))
-		return
-	}
-
-	err = json.Unmarshal(data.Data, &bot)
-	if err != nil {
-		return
-	}
+	err = json.Unmarshal(resp.Data, &bot)
 	return
 }

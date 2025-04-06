@@ -19,9 +19,6 @@ type ResponseBody struct {
 	Version int             `json:"version"`
 }
 
-// 한디리의 API 주소입니다.
-const API_URL = "https://koreanbots.dev/api/v2"
-
 // New 메소드는 새로운 Koreanbots 구조체를 생성합니다은.
 func New(token, clientId string) *Koreanbots {
 	k := &Koreanbots{

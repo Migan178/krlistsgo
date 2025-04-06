@@ -1,6 +1,7 @@
 package koreanbotsgo
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -48,6 +49,50 @@ func get(client *http.Client, url string, headers []map[string]string) (data *Re
 		err = errors.New(fmt.Sprintf("Http Status Code: %d, Message: %s", data.Code, string(data.Message)))
 		return
 	}
+	return
+}
 
+func post(client *http.Client, url string, body any, headers []map[string]string) (data *ResponseBody, err error) {
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return
+	}
+	bodyBuffer := bytes.NewBuffer(bodyBytes)
+	req, err := http.NewRequest(http.MethodPost, API_URL+url, bodyBuffer)
+	if err != nil {
+		return
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+
+	if len(headers) > 0 {
+		for _, header := range headers {
+			for key, value := range header {
+				req.Header.Add(key, value)
+			}
+		}
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(respBody, &data)
+	if err != nil {
+		return
+	}
+
+	if data.Code != 200 {
+		err = errors.New(fmt.Sprintf("Http Status Code: %d, Message: %s", data.Code, string(data.Message)))
+		return
+	}
 	return
 }

@@ -139,3 +139,15 @@ func (k *Koreanbots) Bot(id string) (bot *Bot, err error) {
 	err = json.Unmarshal(resp.Data, &bot)
 	return
 }
+
+func (k *Koreanbots) UpdateServers(servers, shards int) error {
+	_, err := post(k.Client, "/bots/"+k.ClientID+"/stats", map[string]int{
+		"servers": servers,
+		"shards":  shards,
+	}, []map[string]string{
+		{
+			"Authorization": k.Token,
+		},
+	})
+	return err
+}

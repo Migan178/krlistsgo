@@ -16,7 +16,7 @@ type Server struct {
 	ID        string           `json:"id"`
 	Name      string           `json:"name"`
 	Icon      string           `json:"icon"`
-	Owner     User             `json:"owner"`
+	Owner     UserInServer     `json:"owner"`
 	Flags     ServerFlags      `json:"flags"`
 	Votes     int              `json:"votes"`
 	Members   int              `json:"members"`
@@ -95,7 +95,7 @@ const (
 )
 
 func (k *Koreanbots) Server(id string) (server *Server, err error) {
-	resp, err := get(k.Client, "/servers"+id, []map[string]string{})
+	resp, err := get(k.Client, "/servers/"+id, []map[string]string{})
 	if err != nil {
 		return
 	}

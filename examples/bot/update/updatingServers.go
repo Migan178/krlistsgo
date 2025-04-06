@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/Migan178/koreanbotsgo"
+	"github.com/Migan178/krlistsgo"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 
 	flag.Parse()
 
-	krbots := koreanbotsgo.New(*token, *id)
+	krbots := krlistsgo.New(*token, *id)
 
 	err := krbots.UpdateServers(20, 1)
 	if err != nil {

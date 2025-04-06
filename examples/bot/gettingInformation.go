@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/Migan178/koreanbotsgo"
+	"github.com/Migan178/krlistsgo"
 )
 
 func main() {
-	krbots := koreanbotsgo.New("", "") // 필요 없는 값
+	krbots := krlistsgo.New("", "") // 필요 없는 값
 	bot, err := krbots.Bot("704999866094452816")
 	if err != nil {
 		panic(err)

@@ -1,4 +1,4 @@
-package koreanbotsgo
+package krlistsgo
 
 import (
 	"bytes"

@@ -1,5 +1,7 @@
 package koreanbotsgo
 
+import "encoding/json"
+
 // ServerFlags는 서버의 플래그 타입입니다.
 type ServerFlags int
 
@@ -91,3 +93,13 @@ const (
 	ServerPUBG      ServerCategory = "배틀그라운드"
 	ServerMinecraft ServerCategory = "마인크래프트"
 )
+
+func (k *Koreanbots) Server(id string) (server *Server, err error) {
+	resp, err := get(k.Client, "/servers"+id, []map[string]string{})
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(resp.Data, &server)
+	return
+}

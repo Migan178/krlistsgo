@@ -2,14 +2,14 @@ package koreanbotsgo
 
 type UserFlags int
 
-type User struct {
+type User[T, V any] struct {
 	ID       string    `json:"id"`
 	Username string    `json:"username"`
 	Tag      string    `json:"tag"`
 	Github   string    `json:"github"`
 	Flags    UserFlags `json:"flags"`
-	Bots     []*Bot    `json:"bots"`
-	Servers  []*Server `json:"servers"`
+	Bots     []T       `json:"bots"`
+	Servers  []V       `json:"servers"`
 }
 
 const (

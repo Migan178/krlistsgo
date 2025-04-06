@@ -4,11 +4,11 @@ type ServerFlags int
 type ServerState string
 type ServerCategory string
 
-type Server struct {
+type Server[T any] struct {
 	ID        string           `json:"id"`
 	Name      string           `json:"name"`
 	Icon      string           `json:"icon"`
-	Owner     User             `json:"owner"`
+	Owner     T                `json:"owner"`
 	Flags     ServerFlags      `json:"flags"`
 	Votes     int              `json:"votes"`
 	Members   int              `json:"members"`

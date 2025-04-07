@@ -6,7 +6,7 @@ import (
 )
 
 // 한디리 Go SDK의 구조체입니다.
-type Koreanbots struct {
+type KrLists struct {
 	Token    string
 	Client   *http.Client
 	ClientID string
@@ -21,8 +21,8 @@ type ResponseBody struct {
 }
 
 // New 메소드는 새로운 Koreanbots 구조체를 생성합니다은.
-func New(token, clientID string) *Koreanbots {
-	k := &Koreanbots{
+func New(token, clientID string) *KrLists {
+	k := &KrLists{
 		Token:    token,
 		Client:   &http.Client{},
 		ClientID: clientID,

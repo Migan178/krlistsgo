@@ -130,7 +130,7 @@ const (
 )
 
 // Bot의 정보를 갖고옵니다.
-func (k *Koreanbots) Bot(id string) (bot *Bot, err error) {
+func (k *KrLists) Bot(id string) (bot *Bot, err error) {
 	resp, err := get(k.Client, "/bots/"+id, []map[string]string{})
 	if err != nil {
 		return
@@ -140,7 +140,7 @@ func (k *Koreanbots) Bot(id string) (bot *Bot, err error) {
 	return
 }
 
-func (k *Koreanbots) UpdateServers(servers, shards int) error {
+func (k *KrLists) UpdateServers(servers, shards int) error {
 	_, err := post(k.Client, "/bots/"+k.ClientID+"/stats", map[string]int{
 		"servers": servers,
 		"shards":  shards,

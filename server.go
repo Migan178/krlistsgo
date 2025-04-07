@@ -94,7 +94,7 @@ const (
 	ServerMinecraft ServerCategory = "마인크래프트"
 )
 
-func (k *Koreanbots) Server(id string) (server *Server, err error) {
+func (k *KrLists) Server(id string) (server *Server, err error) {
 	resp, err := get(k.Client, "/servers/"+id, []map[string]string{})
 	if err != nil {
 		return

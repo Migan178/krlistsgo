@@ -48,7 +48,7 @@ const (
 )
 
 // User의 정보를 갖고옵니다.
-func (k *Koreanbots) User(id string) (user *User, err error) {
+func (k *KrLists) User(id string) (user *User, err error) {
 	resp, err := get(k.Client, "/users/"+id, []map[string]string{})
 	if err != nil {
 		return

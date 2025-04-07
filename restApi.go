@@ -3,7 +3,6 @@ package krlistsgo
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -46,7 +45,7 @@ func get(client *http.Client, url string, headers []map[string]string) (data *Re
 	}
 
 	if data.Code != 200 {
-		err = errors.New(fmt.Sprintf("Http Status Code: %d, Message: %s", data.Code, string(data.Message)))
+		err = fmt.Errorf("http Status Code: %d, message: %s", data.Code, string(data.Message))
 		return
 	}
 	return
@@ -91,7 +90,7 @@ func post(client *http.Client, url string, body any, headers []map[string]string
 	}
 
 	if data.Code != 200 {
-		err = errors.New(fmt.Sprintf("Http Status Code: %d, Message: %s", data.Code, string(data.Message)))
+		err = fmt.Errorf("http Status Code: %d, message: %s", data.Code, string(data.Message))
 		return
 	}
 	return

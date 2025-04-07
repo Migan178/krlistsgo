@@ -20,7 +20,7 @@ type ResponseBody struct {
 	Version int             `json:"version"`
 }
 
-// New 메소드는 새로운 Koreanbots 구조체를 생성합니다은.
+// New 메소드는 새로운 Krlists 구조체를 생성합니다.
 func New(token, clientID string) *KrLists {
 	k := &KrLists{
 		Token:    token,

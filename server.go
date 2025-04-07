@@ -53,7 +53,7 @@ type ServerInUser struct {
 	State     ServerState      `json:"state"`
 }
 
-// ServerEmoji는 서버의 이모지입니다.
+// ServerEmoji는 서버의 이모지 구조체입니다.
 type ServerEmoji struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`

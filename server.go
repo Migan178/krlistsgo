@@ -94,6 +94,7 @@ const (
 	ServerMinecraft ServerCategory = "마인크래프트"
 )
 
+// Server의 정보를 갖고옵니다.
 func (k *KrLists) Server(id string) (server *Server, err error) {
 	resp, err := get(k.Client, "/servers/"+id, []map[string]string{})
 	if err != nil {
@@ -101,5 +102,18 @@ func (k *KrLists) Server(id string) (server *Server, err error) {
 	}
 
 	err = json.Unmarshal(resp.Data, &server)
+	return
+}
+
+func (k *KrLists) CheckServerVote(serverToken, serverID, userID string) (data *CheckVote, err error) {
+	resp, err := get(k.Client, "/servers/"+serverID+"/vote?userID="+userID, []map[string]string{
+		{
+			"Authorization": serverToken,
+		},
+	})
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(resp.Data, &data)
 	return
 }

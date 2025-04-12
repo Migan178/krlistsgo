@@ -140,6 +140,7 @@ func (k *KrLists) Bot(id string) (bot *Bot, err error) {
 	return
 }
 
+// UpdateServers는 해당 봇의 서버 수를 업데이트합니다.
 func (k *KrLists) UpdateServers(servers, shards int) error {
 	_, err := post(k.Client, "/bots/"+k.ClientID+"/stats", map[string]int{
 		"servers": servers,
@@ -150,4 +151,18 @@ func (k *KrLists) UpdateServers(servers, shards int) error {
 		},
 	})
 	return err
+}
+
+// CheckBotVote는 userID가 해당 봇에 투표했는지를 확인합니다.
+func (k *KrLists) CheckBotVote(userID string) (data *CheckVote, err error) {
+	resp, err := get(k.Client, "/bots/"+k.ClientID+"/vote?userID="+userID, []map[string]string{
+		{
+			"Authorization": k.Token,
+		},
+	})
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(resp.Data, &data)
+	return
 }

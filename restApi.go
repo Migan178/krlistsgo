@@ -9,10 +9,13 @@ import (
 )
 
 // 한디리의 API 주소입니다.
-const API_URL = "https://koreanbots.dev/api/v2"
+const API_URL = "https://koreanbots.dev/api"
+
+// 한디리의 API 버전입니다.
+const API_VERSION = "v2"
 
 func get(client *http.Client, url string, headers []map[string]string) (data *ResponseBody, err error) {
-	req, err := http.NewRequest(http.MethodGet, API_URL+url, nil)
+	req, err := http.NewRequest(http.MethodGet, API_URL+"/"+API_VERSION+url, nil)
 	if err != nil {
 		return
 	}
@@ -57,7 +60,7 @@ func post(client *http.Client, url string, body any, headers []map[string]string
 		return
 	}
 	bodyBuffer := bytes.NewBuffer(bodyBytes)
-	req, err := http.NewRequest(http.MethodPost, API_URL+url, bodyBuffer)
+	req, err := http.NewRequest(http.MethodPost, API_URL+"/"+API_VERSION+url, bodyBuffer)
 	if err != nil {
 		return
 	}

@@ -7,7 +7,7 @@ import (
 // BotFlags는 봇의 플래그 타입입니다.
 type BotFlags int
 
-// Botlib는 봇이 사용하는 라이브러리 타입입니다.
+// BotLib는 봇이 사용하는 라이브러리 타입입니다.
 type BotLib string
 
 // BotState는 한디리에서의 봇 상태 타입입니다.

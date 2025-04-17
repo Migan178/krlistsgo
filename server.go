@@ -102,6 +102,9 @@ func (k *KrLists) Server(id string) (server *Server, err error) {
 	}
 
 	err = json.Unmarshal(resp.Data, &server)
+
+	server.Invite = "https://discord.gg/" + server.Invite
+	server.Owner.Github = "https://github.com/" + server.Owner.Github
 	return
 }
 

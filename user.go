@@ -55,5 +55,11 @@ func (k *KrLists) User(id string) (user *User, err error) {
 	}
 
 	err = json.Unmarshal(resp.Data, &user)
+
+	user.Github = "https://github.com/" + user.Github
+
+	for _, bot := range user.Bots {
+		bot.Discord = "https://discord.gg/" + bot.Discord
+	}
 	return
 }

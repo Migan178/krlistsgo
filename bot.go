@@ -137,6 +137,12 @@ func (k *KrLists) Bot(id string) (bot *Bot, err error) {
 	}
 
 	err = json.Unmarshal(resp.Data, &bot)
+
+	bot.Discord = "https://discord.gg/" + bot.Discord
+
+	for _, owner := range bot.Owners {
+		owner.Github = "https://github.com/" + owner.Github
+	}
 	return
 }
 

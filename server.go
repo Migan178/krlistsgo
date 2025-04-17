@@ -86,7 +86,7 @@ const (
 	ServerAmity     ServerCategory = "친목"
 	ServerMusic     ServerCategory = "음악"
 	ServerEducation ServerCategory = "교육"
-	Serverdate      ServerCategory = "연애"
+	ServerDate      ServerCategory = "연애"
 	ServerGame      ServerCategory = "게임"
 	ServerOverwatch ServerCategory = "오버워치"
 	ServerLOL       ServerCategory = "리그 오브 레전드"

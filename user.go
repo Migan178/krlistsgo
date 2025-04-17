@@ -23,8 +23,8 @@ type UserInBot struct {
 	Tag      string    `json:"tag"`
 	Github   string    `json:"github"`
 	Flags    UserFlags `json:"flags"`
-	Bots     []Bot     `json:"bots"`
-	Servers  []Server  `json:"servers"`
+	Bots     []string  `json:"bots"`
+	Servers  []string  `json:"servers"`
 }
 
 // UserInServer는 Server 구조체안에서의 User 구조체입니다.

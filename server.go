@@ -105,6 +105,17 @@ func (k *KrLists) Server(id string) (server *Server, err error) {
 	return
 }
 
+// ServerOwners는 서버의 관리자들을 블러옵니다.
+func (k *KrLists) ServerOwners(id string) (owners []UserInServer, err error) {
+	resp, err := get(k.Client, "/servers/"+id+"/owners", []map[string]string{})
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(resp.Data, &owners)
+	return
+}
+
 // CheckServerVote는 userID가 해당 서버에 투표했는지를 확인합니다.
 func (k *KrLists) CheckServerVote(serverToken, serverID, userID string) (data *CheckVote, err error) {
 	resp, err := get(k.Client, "/servers/"+serverID+"/vote?userID="+userID, []map[string]string{

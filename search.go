@@ -48,29 +48,45 @@ func (k *KrLists) SearchServers(query string, page int) (*PageResult[Server[User
 }
 
 // Next는 다음 페이지로 넘깁니다.
-func (s *PageResult[T]) Next() (*PageResult[T], error) {
-	if s.Current >= s.Total {
+func (p *PageResult[T]) Next() (*PageResult[T], error) {
+	if p.Current >= p.Total {
 		return nil, SearchLastPageErr
 	}
-	return search[T](s.client, s.searchType, s.query, s.Current+1)
+	return search[T](p.client, p.searchType, p.query, p.Current+1)
 }
 
 // Previous는 이전 페이지로 넘깁니다.
-func (s *PageResult[T]) Previous() (*PageResult[T], error) {
-	if s.Current <= 1 {
+func (p *PageResult[T]) Previous() (*PageResult[T], error) {
+	if p.Current <= 1 {
 		return nil, SearchFirstPageErr
 	}
-	return search[T](s.client, s.searchType, s.query, s.Current-1)
+	return search[T](p.client, p.searchType, p.query, p.Current-1)
 }
 
 // Select는 특정 페이지로 바로 이동합니다.
-func (s *PageResult[T]) Select(page int) (*PageResult[T], error) {
+func (p *PageResult[T]) Select(page int) (*PageResult[T], error) {
 	if page <= 0 {
 		return nil, SearchPositiveNumberErr
 	}
 
-	if page == s.Current {
-		return s, nil
+	if page == p.Current {
+		return p, nil
 	}
-	return search[T](s.client, s.searchType, s.query, page)
+	return search[T](p.client, p.searchType, p.query, page)
+}
+
+// First는 가장 첫 페이지로 이동합니다.
+func (p *PageResult[T]) First() (*PageResult[T], error) {
+	if p.Current == 1 {
+		return p, nil
+	}
+	return search[T](p.client, p.searchType, p.query, 1)
+}
+
+// Last는 가장 마지막 페이지로 이동합니다.
+func (p *PageResult[T]) Last() (*PageResult[T], error) {
+	if p.Current == p.Total {
+		return p, nil
+	}
+	return search[T](p.client, p.searchType, p.query, p.Total)
 }

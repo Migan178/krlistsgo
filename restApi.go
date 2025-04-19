@@ -20,7 +20,7 @@ func get(client *http.Client, url string, headers []map[string]string) (data *Re
 		return
 	}
 
-	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Content-Type", "application/json; charset=utf-8")
 
 	if len(headers) > 0 {
 		for _, header := range headers {
@@ -48,7 +48,7 @@ func get(client *http.Client, url string, headers []map[string]string) (data *Re
 	}
 
 	if data.Code != 200 {
-		err = fmt.Errorf("http Status Code: %d, message: %s", data.Code, string(data.Message))
+		err = fmt.Errorf("http status code: %d, message: %s", data.Code, string(data.Message))
 		return
 	}
 	return

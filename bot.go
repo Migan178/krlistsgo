@@ -20,39 +20,12 @@ type BotStatus string
 type BotCategory string
 
 // Bot은 한디리 API에서 반환된 봇 데이터 타입입니다.
-type Bot struct {
+type Bot[T any] struct {
 	ID       string        `json:"id"`
 	Name     string        `json:"name"`
 	Tag      string        `json:"tag"`
 	Avatar   string        `json:"avatar"`
-	Owners   []UserInBot   `json:"owners"`
-	Flags    BotFlags      `json:"flags"`
-	Lib      BotLib        `json:"lib"`
-	Prefix   string        `json:"prefix"`
-	Votes    int           `json:"votes"`
-	Servers  int           `json:"servers"`
-	Shards   int           `json:"shards"`
-	Intro    string        `json:"intro"`
-	Desc     string        `json:"desc"`
-	Web      string        `json:"web"`
-	Git      string        `json:"git"`
-	Url      string        `json:"url"`
-	Discord  string        `json:"discord"`
-	Category []BotCategory `json:"Category"`
-	Vanity   string        `json:"vanity"`
-	Bg       string        `json:"bg"`
-	Banner   string        `json:"banner"`
-	Status   BotStatus     `json:"status"`
-	State    BotState      `json:"state"`
-}
-
-// BotInUser는 User 구조체안에서의 Bot 구조체입니다.
-type BotInUser struct {
-	ID       string        `json:"id"`
-	Name     string        `json:"name"`
-	Tag      string        `json:"tag"`
-	Avatar   string        `json:"avatar"`
-	Owners   []string      `json:"owners"`
+	Owners   []T           `json:"owners"`
 	Flags    BotFlags      `json:"flags"`
 	Lib      BotLib        `json:"lib"`
 	Prefix   string        `json:"prefix"`
@@ -130,7 +103,7 @@ const (
 )
 
 // Bot의 정보를 갖고옵니다.
-func (k *KrLists) Bot(id string) (bot *Bot, err error) {
+func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
 	resp, err := get(k.Client, "/bots/"+id, []map[string]string{})
 	if err != nil {
 		return

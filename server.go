@@ -12,32 +12,11 @@ type ServerState string
 type ServerCategory string
 
 // Server는 한디리 API에서 반환된 서버 데이터입니다.
-type Server struct {
+type Server[T any] struct {
 	ID        string           `json:"id"`
 	Name      string           `json:"name"`
 	Icon      string           `json:"icon"`
-	Owner     UserInServer     `json:"owner"`
-	Flags     ServerFlags      `json:"flags"`
-	Votes     int              `json:"votes"`
-	Members   int              `json:"members"`
-	BoostTier int              `json:"boostTier"`
-	Intro     string           `json:"intro"`
-	Desc      string           `json:"desc"`
-	Category  []ServerCategory `json:"category"`
-	Invite    string           `json:"invite"`
-	Emojis    []*ServerEmoji   `json:"emojis"`
-	Vanity    string           `json:"vanity"`
-	Bg        string           `json:"bg"`
-	Banner    string           `json:"banner"`
-	State     ServerState      `json:"state"`
-}
-
-// ServerInUser는 User 구조체 안에서의 Server 구조체입니다.
-type ServerInUser struct {
-	ID        string           `json:"id"`
-	Name      string           `json:"name"`
-	Icon      string           `json:"icon"`
-	Owner     string           `json:"owner"`
+	Owner     T                `json:"owner"`
 	Flags     ServerFlags      `json:"flags"`
 	Votes     int              `json:"votes"`
 	Members   int              `json:"members"`
@@ -95,7 +74,7 @@ const (
 )
 
 // Server의 정보를 갖고옵니다.
-func (k *KrLists) Server(id string) (server *Server, err error) {
+func (k *KrLists) Server(id string) (server *Server[User[string, string]], err error) {
 	resp, err := get(k.Client, "/servers/"+id, []map[string]string{})
 	if err != nil {
 		return
@@ -109,7 +88,7 @@ func (k *KrLists) Server(id string) (server *Server, err error) {
 }
 
 // ServerOwners는 서버의 관리자들을 블러옵니다.
-func (k *KrLists) ServerOwners(id string) (owners []UserInServer, err error) {
+func (k *KrLists) ServerOwners(id string) (owners []User[string, string], err error) {
 	resp, err := get(k.Client, "/servers/"+id+"/owners", []map[string]string{})
 	if err != nil {
 		return

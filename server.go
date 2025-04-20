@@ -99,15 +99,20 @@ func (k *KrLists) ServerOwners(id string) (owners []User[string, string], err er
 }
 
 // CheckServerVote는 userID가 해당 서버에 투표했는지를 확인합니다.
-func (k *KrLists) CheckServerVote(serverToken, serverID, userID string) (data *CheckVote, err error) {
-	resp, err := get(k.Client, "/servers/"+serverID+"/vote?userID="+userID, []map[string]string{
+func (k *KrLists) CheckServerVote(userID string) (data *CheckVote, err error) {
+	if k.ServerIdentify == nil {
+		return nil, ServerIdentifyIsNil
+	}
+
+	resp, err := get(k.Client, "/servers/"+k.ServerIdentify.ID+"/vote?userID="+userID, []map[string]string{
 		{
-			"Authorization": serverToken,
+			"Authorization": k.ServerIdentify.Token,
 		},
 	})
 	if err != nil {
 		return
 	}
+
 	err = json.Unmarshal(resp.Data, &data)
 	return
 }

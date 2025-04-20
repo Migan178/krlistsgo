@@ -12,9 +12,9 @@ func main() {
 
 	flag.Parse()
 
-	krbots := krlistsgo.New(*token, *id)
+	k := krlistsgo.New().SetBotIdentify(*token, *id)
 
-	err := krbots.UpdateServers(20, 1)
+	err := k.UpdateServers(20, 1)
 	if err != nil {
 		panic(err)
 	}

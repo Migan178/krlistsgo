@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	k := krlistsgo.New("", "") // 필요 없는 값
+	k := krlistsgo.New()
 	owners, err := k.ServerOwners("909768169248395274")
 	if err != nil {
 		panic(err)

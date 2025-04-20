@@ -13,7 +13,7 @@ func main() {
 
 	flag.Parse()
 
-	krLists := krlistsgo.New(*token, *id)
+	krLists := krlistsgo.New().SetBotIdentify(*token, *id)
 	data, err := krLists.CheckBotVote("415135882006495242")
 	if err != nil {
 		panic(err)

@@ -121,12 +121,16 @@ func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
 
 // UpdateServers는 해당 봇의 서버 수를 업데이트합니다.
 func (k *KrLists) UpdateServers(servers, shards int) error {
-	_, err := post(k.Client, "/bots/"+k.ClientID+"/stats", map[string]int{
+	if k.BotIdentify == nil {
+		return BotIdentifyIsNil
+	}
+
+	_, err := post(k.Client, "/bots/"+k.BotIdentify.ID+"/stats", map[string]int{
 		"servers": servers,
 		"shards":  shards,
 	}, []map[string]string{
 		{
-			"Authorization": k.Token,
+			"Authorization": k.BotIdentify.Token,
 		},
 	})
 	return err
@@ -134,14 +138,19 @@ func (k *KrLists) UpdateServers(servers, shards int) error {
 
 // CheckBotVote는 userID가 해당 봇에 투표했는지를 확인합니다.
 func (k *KrLists) CheckBotVote(userID string) (data *CheckVote, err error) {
-	resp, err := get(k.Client, "/bots/"+k.ClientID+"/vote?userID="+userID, []map[string]string{
+	if k.BotIdentify == nil {
+		return nil, BotIdentifyIsNil
+	}
+
+	resp, err := get(k.Client, "/bots/"+k.BotIdentify.ID+"/vote?userID="+userID, []map[string]string{
 		{
-			"Authorization": k.Token,
+			"Authorization": k.BotIdentify.Token,
 		},
 	})
 	if err != nil {
 		return
 	}
+
 	err = json.Unmarshal(resp.Data, &data)
 	return
 }

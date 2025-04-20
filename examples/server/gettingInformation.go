@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	krbots := krlistsgo.New("", "") //필요 없는 값
-	server, err := krbots.Server("909768169248395274")
+	k := krlistsgo.New()
+	server, err := k.Server("909768169248395274")
 	if err != nil {
 		panic(err)
 	}

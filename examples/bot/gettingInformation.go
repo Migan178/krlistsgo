@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	krbots := krlistsgo.New("", "") // 필요 없는 값
-	bot, err := krbots.Bot("704999866094452816")
+	k := krlistsgo.New()
+	bot, err := k.Bot("704999866094452816")
 	if err != nil {
 		panic(err)
 	}

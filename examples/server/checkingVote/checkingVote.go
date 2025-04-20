@@ -13,8 +13,8 @@ func main() {
 
 	flag.Parse()
 
-	krLists := krlistsgo.New("", "") // 필요 없는 값
-	data, err := krLists.CheckServerVote(*token, *id, "415135882006495242")
+	k := krlistsgo.New().SetServerIdentify(*token, *id)
+	data, err := k.CheckServerVote("415135882006495242")
 	if err != nil {
 		panic(err)
 	}

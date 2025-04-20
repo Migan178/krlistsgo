@@ -88,21 +88,27 @@ func (k *KrLists) SearchServers(query string, page int) (*PageResult[Server[User
 	return search[Server[User[string, string]]](k.Client, "servers", query, page)
 }
 
+// NewBots는 새로운 봇의 리스트를 갖고옵니다.
 func (k *KrLists) NewBots(page int) (*PageResult[Bot[string]], error) {
 	return new[Bot[string]](k.Client, "bots", page)
 }
 
-func (k *KrLists) NewServers(page int) (*PageResult[Server[User[string, string]]], error) {
-	return new[Server[User[string, string]]](k.Client, "servers", page)
-}
-
+// BotsVoteRanking은 봇의 하트 수 랭킹을 갖고옵니다.
 func (k *KrLists) BotsVoteRanking(page int) (*PageResult[Bot[string]], error) {
 	return votes[Bot[string]](k.Client, "bots", page)
 }
 
-func (k *KrLists) ServersVoteRanking(page int) (*PageResult[Server[User[string, string]]], error) {
-	return votes[Server[User[string, string]]](k.Client, "servers", page)
-}
+// 한디리 API에 해당 기능 없음
+// // NewServers는 새로운 서버의 리스트를 갖고옵니다
+// func (k *KrLists) NewServers(page int) (*PageResult[Server[User[string, string]]], error) {
+// 	return new[Server[User[string, string]]](k.Client, "servers", page)
+// }
+
+// 한디리 API에 해당 기능 없음
+// // ServersVoteRanking은 서버의 하트 수 랭킹을 갖고옵니다.
+// func (k *KrLists) ServersVoteRanking(page int) (*PageResult[Server[User[string, string]]], error) {
+// 	return votes[Server[User[string, string]]](k.Client, "servers", page)
+// }
 
 // Next는 다음 페이지로 넘깁니다.
 func (p *PageResult[T]) Next() (*PageResult[T], error) {

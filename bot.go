@@ -2,6 +2,7 @@ package krlistsgo
 
 import (
 	"encoding/json"
+	"net/http"
 )
 
 // BotFlags는 봇의 플래그 타입입니다.
@@ -44,6 +45,8 @@ type Bot[T any] struct {
 	Banner   string        `json:"banner"`
 	Status   BotStatus     `json:"status"`
 	State    BotState      `json:"state"`
+	client   *http.Client  `json:"-"`
+	identify *Identify     `json:"-"`
 }
 
 // 봇의 플래그입니다.
@@ -112,6 +115,8 @@ func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
 	err = json.Unmarshal(resp.Data, &bot)
 
 	bot.Discord = "https://discord.gg/" + bot.Discord
+	bot.client = k.Client
+	bot.identify = k.BotIdentify
 
 	for _, owner := range bot.Owners {
 		owner.Github = "https://github.com/" + owner.Github
@@ -134,23 +139,4 @@ func (k *KrLists) UpdateServers(servers, shards int) error {
 		},
 	})
 	return err
-}
-
-// CheckBotVote는 userID가 해당 봇에 투표했는지를 확인합니다.
-func (k *KrLists) CheckBotVote(userID string) (data *CheckVote, err error) {
-	if k.BotIdentify == nil {
-		return nil, BotIdentifyIsNil
-	}
-
-	resp, err := get(k.Client, "/bots/"+k.BotIdentify.ID+"/vote?userID="+userID, []map[string]string{
-		{
-			"Authorization": k.BotIdentify.Token,
-		},
-	})
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(resp.Data, &data)
-	return
 }

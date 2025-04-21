@@ -1,6 +1,9 @@
 package krlistsgo
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 // ServerFlags는 서버의 플래그 타입입니다.
 type ServerFlags int
@@ -30,6 +33,8 @@ type Server[T any] struct {
 	Bg        string           `json:"bg"`
 	Banner    string           `json:"banner"`
 	State     ServerState      `json:"state"`
+	client    *http.Client     `json:"-"`
+	identify  *Identify        `json:"-"`
 }
 
 // ServerEmoji는 서버의 이모지 구조체입니다.
@@ -84,6 +89,8 @@ func (k *KrLists) Server(id string) (server *Server[User[string, string]], err e
 
 	server.Invite = "https://discord.gg/" + server.Invite
 	server.Owner.Github = "https://github.com/" + server.Owner.Github
+	server.client = k.Client
+	server.identify = k.ServerIdentify
 	return
 }
 
@@ -95,24 +102,5 @@ func (k *KrLists) ServerOwners(id string) (owners []User[string, string], err er
 	}
 
 	err = json.Unmarshal(resp.Data, &owners)
-	return
-}
-
-// CheckServerVote는 userID가 해당 서버에 투표했는지를 확인합니다.
-func (k *KrLists) CheckServerVote(userID string) (data *CheckVote, err error) {
-	if k.ServerIdentify == nil {
-		return nil, ServerIdentifyIsNil
-	}
-
-	resp, err := get(k.Client, "/servers/"+k.ServerIdentify.ID+"/vote?userID="+userID, []map[string]string{
-		{
-			"Authorization": k.ServerIdentify.Token,
-		},
-	})
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(resp.Data, &data)
 	return
 }

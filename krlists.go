@@ -31,12 +31,6 @@ type ResponseBody struct {
 	Version int             `json:"version"`
 }
 
-// CheckVote는 해당 봇이나 서버의 투표 여부를 확인할 때 반환되는 데이터입니다.
-type CheckVote struct {
-	Voted    bool `json:"voted"`
-	LastVote int  `json:"lastvote"`
-}
-
 // New 메소드는 새로운 KrLists 구조체를 생성합니다.
 func New() *KrLists {
 	k := &KrLists{

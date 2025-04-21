@@ -34,7 +34,7 @@ func search[T Server[User[string, string]] | Bot[string]](c *http.Client, search
 	}
 
 	query = url.QueryEscape(query)
-	resp, err := get(c, fmt.Sprintf("/search/%s?query=%s&page=%d", searchType, query, page), []map[string]string{})
+	resp, err := get(c, fmt.Sprintf("/search/%s?query=%s&page=%d", searchType, query, page), nil)
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func new[T Server[User[string, string]] | Bot[string]](c *http.Client, searchTyp
 		return nil, ListPositiveNumberErr
 	}
 
-	resp, err := get(c, fmt.Sprintf("/list/%s/new?page=%d", searchType, page), []map[string]string{})
+	resp, err := get(c, fmt.Sprintf("/list/%s/new?page=%d", searchType, page), nil)
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func votes[T Server[User[string, string]] | Bot[string]](c *http.Client, searchT
 		return nil, ListPositiveNumberErr
 	}
 
-	resp, err := get(c, fmt.Sprintf("/list/%s/votes?page=%d", searchType, page), []map[string]string{})
+	resp, err := get(c, fmt.Sprintf("/list/%s/votes?page=%d", searchType, page), nil)
 	if err != nil {
 		return
 	}

@@ -14,19 +14,17 @@ const API_URL = "https://koreanbots.dev/api"
 // 한디리의 API 버전입니다.
 const API_VERSION = "v2"
 
-func get(client *http.Client, url string, headers []map[string]string) (data *ResponseBody, err error) {
-	req, err := http.NewRequest(http.MethodGet, API_URL+"/"+API_VERSION+url, nil)
+func get(client *http.Client, url string, header *map[string]string) (data *ResponseBody, err error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s%s", API_URL, API_VERSION, url), nil)
 	if err != nil {
 		return
 	}
 
-	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	req.Header.Add("Content-Type", "application/json")
 
-	if len(headers) > 0 {
-		for _, header := range headers {
-			for key, value := range header {
-				req.Header.Add(key, value)
-			}
+	if header != nil {
+		for key, value := range *header {
+			req.Header.Add(key, value)
 		}
 	}
 
@@ -54,7 +52,7 @@ func get(client *http.Client, url string, headers []map[string]string) (data *Re
 	return
 }
 
-func post(client *http.Client, url string, body any, headers []map[string]string) (data *ResponseBody, err error) {
+func post(client *http.Client, url string, body any, header *map[string]string) (data *ResponseBody, err error) {
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
 		return
@@ -67,11 +65,9 @@ func post(client *http.Client, url string, body any, headers []map[string]string
 
 	req.Header.Add("Content-Type", "application/json")
 
-	if len(headers) > 0 {
-		for _, header := range headers {
-			for key, value := range header {
-				req.Header.Add(key, value)
-			}
+	if header != nil {
+		for key, value := range *header {
+			req.Header.Add(key, value)
 		}
 	}
 

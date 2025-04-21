@@ -20,10 +20,8 @@ func checkVote(c *http.Client, i *Identify, voteType, userID string) (data *Chec
 		return nil, ServerIdentifyIsNil
 	}
 
-	resp, err := get(c, "/"+voteType+"/"+i.ID+"/vote?userID="+userID, []map[string]string{
-		{
-			"Authorization": i.Token,
-		},
+	resp, err := get(c, "/"+voteType+"/"+i.ID+"/vote?userID="+userID, &map[string]string{
+		"Authorization": i.Token,
 	})
 	if err != nil {
 		return

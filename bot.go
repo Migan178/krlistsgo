@@ -107,7 +107,7 @@ const (
 
 // Bot의 정보를 갖고옵니다.
 func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
-	resp, err := get(k.Client, "/bots/"+id, []map[string]string{})
+	resp, err := get(k.Client, "/bots/"+id, nil)
 	if err != nil {
 		return
 	}
@@ -130,13 +130,13 @@ func (k *KrLists) UpdateServers(servers, shards int) error {
 		return BotIdentifyIsNil
 	}
 
-	_, err := post(k.Client, "/bots/"+k.BotIdentify.ID+"/stats", map[string]int{
+	body := map[string]int{
 		"servers": servers,
 		"shards":  shards,
-	}, []map[string]string{
-		{
-			"Authorization": k.BotIdentify.Token,
-		},
+	}
+
+	_, err := post(k.Client, "/bots/"+k.BotIdentify.ID+"/stats", body, &map[string]string{
+		"Authorization": k.BotIdentify.Token,
 	})
 	return err
 }

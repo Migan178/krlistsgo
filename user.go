@@ -27,7 +27,7 @@ const (
 
 // User의 정보를 갖고옵니다.
 func (k *KrLists) User(id string) (user *User[Bot[string], Server[string]], err error) {
-	resp, err := get(k.Client, "/users/"+id, []map[string]string{})
+	resp, err := get(k.Client, "/users/"+id, nil)
 	if err != nil {
 		return
 	}

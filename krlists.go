@@ -43,6 +43,7 @@ func New() *KrLists {
 	return k
 }
 
+// SetBotIdentify는 당신의 봇의 자격 증명을 추가합니다.
 func (k *KrLists) SetBotIdentify(token, id string) *KrLists {
 	k.BotIdentify = &Identify{
 		Token: token,
@@ -54,6 +55,7 @@ func (k *KrLists) SetBotIdentify(token, id string) *KrLists {
 	return k
 }
 
+// SetServerIdentify는 당신의 서버의 자격 증명을 추가합니다.
 func (k *KrLists) SetServerIdentify(token, id string) *KrLists {
 	k.ServerIdentify = &Identify{
 		Token: token,

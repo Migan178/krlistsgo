@@ -5,15 +5,20 @@ import (
 	"net/http"
 )
 
-// 한디리 Go SDK의 구조체입니다.
+// KrLists는 한디리 Go SDK의 구조체입니다.
 type KrLists struct {
 	Client         *http.Client
 	BotIdentify    *Identify
 	ServerIdentify *Identify
+	CachedData     CachedData
 
-	// Deprecated: BotIdentify 또는 ServerIdentify 구조체를 이용해주세요.
+	// 기본 캐시 간격은 1 시간 (3600 초)입니다.
+	// 캐시 간격은 SetCache로 설정할 수 있습니다.
+	CacheInterval int
+
+	// Deprecated: BotIdentify 또는 ServerIdentify 구조체를 이용해주시길 바랍니다.
 	Token string
-	// Deprecated: BotIdentify 또는 ServerIdentify 구조체를 이용해주세요.
+	// Deprecated: BotIdentify 또는 ServerIdentify 구조체를 이용해주시길 바랍니다.
 	ClientID string
 }
 
@@ -35,6 +40,12 @@ type ResponseBody struct {
 func New() *KrLists {
 	k := &KrLists{
 		Client: &http.Client{},
+		CachedData: CachedData{
+			Bots:    map[string]*Bot[User[string, string]]{},
+			Servers: map[string]*Server[User[string, string]]{},
+			Users:   map[string]*User[Bot[string], Server[string]]{},
+		},
+		CacheInterval: 3600,
 
 		// 아래 값들은 SetBotIdentify를 써야 채워짐.
 		Token:    "",

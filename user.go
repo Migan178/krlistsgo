@@ -1,19 +1,23 @@
 package krlistsgo
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 // UserFlags는 유저의 플래그 타입입니다.
 type UserFlags int
 
 // User는 한디리 API에서 반환된 유저 데이터입니다.
 type User[T, V any] struct {
-	ID       string    `json:"id"`
-	Username string    `json:"username"`
-	Tag      string    `json:"tag"`
-	Github   string    `json:"github"`
-	Flags    UserFlags `json:"flags"`
-	Bots     []T       `json:"bots"`
-	Servers  []V       `json:"servers"`
+	ID          string    `json:"id"`
+	Username    string    `json:"username"`
+	Tag         string    `json:"tag"`
+	Github      string    `json:"github"`
+	Flags       UserFlags `json:"flags"`
+	Bots        []T       `json:"bots"`
+	Servers     []V       `json:"servers"`
+	lastUpdated time.Time `json:"-"`
 }
 
 // 유저의 플래그입니다.
@@ -27,17 +31,32 @@ const (
 
 // User의 정보를 갖고옵니다.
 func (k *KrLists) User(id string) (user *User[Bot[string], Server[string]], err error) {
+	if k.CacheInterval != 0 {
+		if data, ok := k.CachedData.Users[id]; ok {
+			if data.lastUpdated.Unix()-int64(k.CacheInterval) < int64(k.CacheInterval) {
+				return data, nil
+			}
+			delete(k.CachedData.Users, id)
+		}
+	}
+
 	resp, err := get(k.Client, "/users/"+id, nil)
 	if err != nil {
 		return
 	}
 
 	err = json.Unmarshal(resp.Data, &user)
+	if err != nil {
+		return
+	}
 
 	user.Github = "https://github.com/" + user.Github
+	user.lastUpdated = time.Now()
 
 	for _, bot := range user.Bots {
 		bot.Discord = "https://discord.gg/" + bot.Discord
 	}
+
+	k.CachedData.Users[id] = user
 	return
 }

@@ -8,14 +8,8 @@ import (
 	"net/http"
 )
 
-// 한디리의 API 주소입니다.
-const API_URL = "https://koreanbots.dev/api"
-
-// 한디리의 API 버전입니다.
-const API_VERSION = "v2"
-
 func get(client *http.Client, url string, header *map[string]string) (data *ResponseBody, err error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s%s", API_URL, API_VERSION, url), nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return
 	}
@@ -58,7 +52,7 @@ func post(client *http.Client, url string, body any, header *map[string]string) 
 		return
 	}
 	bodyBuffer := bytes.NewBuffer(bodyBytes)
-	req, err := http.NewRequest(http.MethodPost, API_URL+"/"+API_VERSION+url, bodyBuffer)
+	req, err := http.NewRequest(http.MethodPost, url, bodyBuffer)
 	if err != nil {
 		return
 	}

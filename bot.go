@@ -118,7 +118,7 @@ func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
 		}
 	}
 
-	resp, err := get(k.Client, "/bots/"+id, nil)
+	resp, err := get(k.Client, EndpointBots(id), nil)
 	if err != nil {
 		return
 	}
@@ -152,7 +152,7 @@ func (k *KrLists) UpdateServers(servers, shards int) error {
 		"shards":  shards,
 	}
 
-	_, err := post(k.Client, "/bots/"+k.BotIdentify.ID+"/stats", body, &map[string]string{
+	_, err := post(k.Client, EndpointBotUpdateServers(k.BotIdentify.ID), body, &map[string]string{
 		"Authorization": k.BotIdentify.Token,
 	})
 	return err

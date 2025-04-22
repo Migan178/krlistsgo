@@ -12,6 +12,7 @@ type CheckVote struct {
 }
 
 func checkVote(c *http.Client, i *Identify, voteType, userID string) (data *CheckVote, err error) {
+	var url string
 	if i == nil {
 		if voteType == "bots" {
 			return nil, BotIdentifyIsNil
@@ -20,7 +21,14 @@ func checkVote(c *http.Client, i *Identify, voteType, userID string) (data *Chec
 		return nil, ServerIdentifyIsNil
 	}
 
-	resp, err := get(c, "/"+voteType+"/"+i.ID+"/vote?userID="+userID, &map[string]string{
+	switch voteType {
+	case "bots":
+		url = EndpointBotVote(i.ID, userID)
+	case "servers":
+		url = EndpointServerVote(i.ID, userID)
+	}
+
+	resp, err := get(c, url, &map[string]string{
 		"Authorization": i.Token,
 	})
 	if err != nil {

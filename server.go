@@ -91,7 +91,7 @@ func (k *KrLists) Server(id string) (server *Server[User[string, string]], err e
 		}
 	}
 
-	resp, err := get(k.Client, "/servers/"+id, nil)
+	resp, err := get(k.Client, EndpointServers(id), nil)
 	if err != nil {
 		return
 	}
@@ -113,7 +113,7 @@ func (k *KrLists) Server(id string) (server *Server[User[string, string]], err e
 
 // ServerOwners는 서버의 관리자들을 블러옵니다.
 func (k *KrLists) ServerOwners(id string) (owners []User[string, string], err error) {
-	resp, err := get(k.Client, "/servers/"+id+"/owners", nil)
+	resp, err := get(k.Client, EndpointServerOwners(id), nil)
 	if err != nil {
 		return
 	}

@@ -40,7 +40,7 @@ func (k *KrLists) User(id string) (user *User[Bot[string], Server[string]], err 
 		}
 	}
 
-	resp, err := get(k.Client, "/users/"+id, nil)
+	resp, err := get(k.Client, EndpointUsers(id), nil)
 	if err != nil {
 		return
 	}

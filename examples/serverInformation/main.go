@@ -8,9 +8,9 @@ import (
 
 func main() {
 	k := krlistsgo.New()
-	server, err := k.Server("909768169248395274")
+	data, err := k.Server("909768169248395274")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(server)
+	fmt.Println(data)
 }

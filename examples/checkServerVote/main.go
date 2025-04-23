@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	token := flag.String("token", "", "server's koreanbots token")
-	id := flag.String("id", "", "server's id")
+	token := flag.String("token", "", "서버의 한디리 토큰")
+	id := flag.String("id", "", "서버의 디스코드 아이디")
 
 	flag.Parse()
 

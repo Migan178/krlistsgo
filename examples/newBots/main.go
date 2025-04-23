@@ -8,9 +8,9 @@ import (
 
 func main() {
 	k := krlistsgo.New()
-	owners, err := k.ServerOwners("909768169248395274")
+	data, err := k.NewBots(1)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(owners)
+	fmt.Println(data)
 }

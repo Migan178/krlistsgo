@@ -8,9 +8,9 @@ import (
 
 func main() {
 	k := krlistsgo.New()
-	user, err := k.User("415135882006495242")
+	url, err := k.BotWidget("704999866094452816", krlistsgo.WidgetBotVotes, krlistsgo.WidgetFlat, 1.0, true)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(user)
+	fmt.Println(url)
 }

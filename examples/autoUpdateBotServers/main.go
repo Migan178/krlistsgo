@@ -11,30 +11,24 @@ import (
 )
 
 func main() {
-	kToken := flag.String("kToken", "", "discordbot's koreanbots token")
-	dToken := flag.String("dToken", "", "discordbot's discord token")
+	kToken := flag.String("kToken", "", "봇의 디스코드 토큰")
+	dToken := flag.String("dToken", "", "봇의 한디리 토큰")
 
 	flag.Parse()
 
 	dg, err := discordgo.New("Bot " + *dToken)
-	if err != nil {
-		panic(err)
-	}
 
 	err = dg.Open()
 	if err != nil {
 		panic(err)
 	}
 
-	// 해당 함수를 사용함으로써 반환되는 *KrLists 값은 필요 없어서 값 할당 안함.
-	// 봇이 시작된 (= 로그인된)뒤에 해당 함수를 사용해줘야함.
 	krlistsgo.NewKrListsWithDiscordGo(dg, *kToken, true)
 
-	defer func() {
-		dg.Close()
-	}()
+	defer dg.Close()
 
 	sc := make(chan os.Signal, 1)
+
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 }

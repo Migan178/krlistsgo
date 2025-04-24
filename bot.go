@@ -2,6 +2,8 @@ package krlistsgo
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
 )
 
 // BotFlags는 봇의 플래그 타입입니다.
@@ -20,57 +22,33 @@ type BotStatus string
 type BotCategory string
 
 // Bot은 한디리 API에서 반환된 봇 데이터 타입입니다.
-type Bot struct {
-	ID       string        `json:"id"`
-	Name     string        `json:"name"`
-	Tag      string        `json:"tag"`
-	Avatar   string        `json:"avatar"`
-	Owners   []UserInBot   `json:"owners"`
-	Flags    BotFlags      `json:"flags"`
-	Lib      BotLib        `json:"lib"`
-	Prefix   string        `json:"prefix"`
-	Votes    int           `json:"votes"`
-	Servers  int           `json:"servers"`
-	Shards   int           `json:"shards"`
-	Intro    string        `json:"intro"`
-	Desc     string        `json:"desc"`
-	Web      string        `json:"web"`
-	Git      string        `json:"git"`
-	Url      string        `json:"url"`
-	Discord  string        `json:"discord"`
-	Category []BotCategory `json:"Category"`
-	Vanity   string        `json:"vanity"`
-	Bg       string        `json:"bg"`
-	Banner   string        `json:"banner"`
-	Status   BotStatus     `json:"status"`
-	State    BotState      `json:"state"`
-}
-
-// BotInUser는 User 구조체안에서의 Bot 구조체입니다.
-type BotInUser struct {
-	ID       string        `json:"id"`
-	Name     string        `json:"name"`
-	Tag      string        `json:"tag"`
-	Avatar   string        `json:"avatar"`
-	Owners   []string      `json:"owners"`
-	Flags    BotFlags      `json:"flags"`
-	Lib      BotLib        `json:"lib"`
-	Prefix   string        `json:"prefix"`
-	Votes    int           `json:"votes"`
-	Servers  int           `json:"servers"`
-	Shards   int           `json:"shards"`
-	Intro    string        `json:"intro"`
-	Desc     string        `json:"desc"`
-	Web      string        `json:"web"`
-	Git      string        `json:"git"`
-	Url      string        `json:"url"`
-	Discord  string        `json:"discord"`
-	Category []BotCategory `json:"Category"`
-	Vanity   string        `json:"vanity"`
-	Bg       string        `json:"bg"`
-	Banner   string        `json:"banner"`
-	Status   BotStatus     `json:"status"`
-	State    BotState      `json:"state"`
+type Bot[T any] struct {
+	ID          string        `json:"id"`
+	Name        string        `json:"name"`
+	Tag         string        `json:"tag"`
+	Avatar      string        `json:"avatar"`
+	Owners      []T           `json:"owners"`
+	Flags       BotFlags      `json:"flags"`
+	Lib         BotLib        `json:"lib"`
+	Prefix      string        `json:"prefix"`
+	Votes       int           `json:"votes"`
+	Servers     int           `json:"servers"`
+	Shards      int           `json:"shards"`
+	Intro       string        `json:"intro"`
+	Desc        string        `json:"desc"`
+	Web         string        `json:"web"`
+	Git         string        `json:"git"`
+	Url         string        `json:"url"`
+	Discord     string        `json:"discord"`
+	Category    []BotCategory `json:"Category"`
+	Vanity      string        `json:"vanity"`
+	Bg          string        `json:"bg"`
+	Banner      string        `json:"banner"`
+	Status      BotStatus     `json:"status"`
+	State       BotState      `json:"state"`
+	client      *http.Client  `json:"-"`
+	identify    *Identify     `json:"-"`
+	lastUpdated time.Time     `json:"-"`
 }
 
 // 봇의 플래그입니다.
@@ -130,39 +108,52 @@ const (
 )
 
 // Bot의 정보를 갖고옵니다.
-func (k *KrLists) Bot(id string) (bot *Bot, err error) {
-	resp, err := get(k.Client, "/bots/"+id, []map[string]string{})
+func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
+	if k.CacheInterval != 0 {
+		if data, ok := k.CachedData.Bots[id]; ok {
+			if data.lastUpdated.Unix()-int64(k.CacheInterval) < int64(k.CacheInterval) {
+				return data, nil
+			}
+			delete(k.CachedData.Bots, id)
+		}
+	}
+
+	resp, err := get(k.Client, EndpointBots(id), nil)
 	if err != nil {
 		return
 	}
 
 	err = json.Unmarshal(resp.Data, &bot)
+	if err != nil {
+		return
+	}
+
+	bot.Discord = "https://discord.gg/" + bot.Discord
+	bot.client = k.Client
+	bot.identify = k.BotIdentify
+	bot.lastUpdated = time.Now()
+
+	for _, owner := range bot.Owners {
+		owner.Github = "https://github.com/" + owner.Github
+	}
+
+	k.CachedData.Bots[id] = bot
 	return
 }
 
 // UpdateServers는 해당 봇의 서버 수를 업데이트합니다.
 func (k *KrLists) UpdateServers(servers, shards int) error {
-	_, err := post(k.Client, "/bots/"+k.ClientID+"/stats", map[string]int{
+	if k.BotIdentify == nil {
+		return BotIdentifyIsNil
+	}
+
+	body := map[string]int{
 		"servers": servers,
 		"shards":  shards,
-	}, []map[string]string{
-		{
-			"Authorization": k.Token,
-		},
+	}
+
+	_, err := post(k.Client, EndpointBotUpdateServers(k.BotIdentify.ID), body, &map[string]string{
+		"Authorization": k.BotIdentify.Token,
 	})
 	return err
-}
-
-// CheckBotVote는 userID가 해당 봇에 투표했는지를 확인합니다.
-func (k *KrLists) CheckBotVote(userID string) (data *CheckVote, err error) {
-	resp, err := get(k.Client, "/bots/"+k.ClientID+"/vote?userID="+userID, []map[string]string{
-		{
-			"Authorization": k.Token,
-		},
-	})
-	if err != nil {
-		return
-	}
-	err = json.Unmarshal(resp.Data, &data)
-	return
 }

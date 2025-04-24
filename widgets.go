@@ -58,16 +58,16 @@ func (k *KrLists) BotWidget(id string, widgetType BotWidgetType, style WidgetSty
 }
 
 // ServerWidget은 서버의 위젯 URL을 반환합니다.
-func (k *KrLists) ServerWidget(id string, widgetType ServerState, style WidgetStyle, scale float32, icon bool) (string, error) {
+func (k *KrLists) ServerWidget(id string, widgetType ServerWidgetType, style WidgetStyle, scale float32, icon bool) (string, error) {
 	return getWidget(false, id, string(widgetType), string(style), scale, icon)
 }
 
 // Widget은 해당 봇의 위젯의 URL을 반환합니다.
-func (b *Bot) Widget(widgetType BotWidgetType, style WidgetStyle, scale float32, icon bool) (string, error) {
+func (b *Bot[T]) Widget(widgetType BotWidgetType, style WidgetStyle, scale float32, icon bool) (string, error) {
 	return getWidget(true, b.ID, string(widgetType), string(style), scale, icon)
 }
 
 // Widget은 해당 서버의 위젯의 URL을 반환합니다.
-func (s *Server) Widget(widgetType ServerState, style WidgetStyle, scale float32, icon bool) (string, error) {
+func (s *Server[T]) Widget(widgetType ServerState, style WidgetStyle, scale float32, icon bool) (string, error) {
 	return getWidget(false, s.ID, string(widgetType), string(style), scale, icon)
 }

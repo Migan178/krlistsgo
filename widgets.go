@@ -34,7 +34,7 @@ const (
 func getWidget(isBot bool, id, widgetType, style string, scale float32, icon bool) (string, error) {
 	botOrServer := "bots"
 	if scale < 0.5 || scale > 3.0 {
-		return "", fmt.Errorf("scale의 값은 0.5이상, 3.0이하입니다.")
+		return "", fmt.Errorf("scale의 값은 0.5이상, 3.0이하입니다")
 	}
 
 	if !isBot {

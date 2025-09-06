@@ -31,6 +31,14 @@ const (
 
 // User의 정보를 갖고옵니다.
 func (k *KrLists) User(id string) (user *User[Bot[string], Server[string]], err error) {
+	var token string
+
+	if k.BotIdentify != nil {
+		token = k.BotIdentify.Token
+	} else {
+		token = k.ServerIdentify.Token
+	}
+
 	if k.CacheInterval != 0 {
 		if data, ok := k.CachedData.Users[id]; ok {
 			if data.lastUpdated.Unix()-int64(k.CacheInterval) < int64(k.CacheInterval) {
@@ -40,7 +48,9 @@ func (k *KrLists) User(id string) (user *User[Bot[string], Server[string]], err 
 		}
 	}
 
-	resp, err := get(k.Client, EndpointUsers(id), nil)
+	resp, err := get(k.Client, EndpointUsers(id), &map[string]string{
+		"Authorization": token,
+	})
 	if err != nil {
 		return
 	}

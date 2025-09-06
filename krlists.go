@@ -74,3 +74,15 @@ func (k *KrLists) SetServerIdentify(token, id string) *KrLists {
 	}
 	return k
 }
+
+func (k *KrLists) getAnyToken() (string, error) {
+	if k.BotIdentify == nil {
+		if k.ServerIdentify == nil {
+			return "", ErrAnyTokenIsNil
+		} else {
+			return k.ServerIdentify.Token, nil
+		}
+	} else {
+		return k.BotIdentify.Token, nil
+	}
+}

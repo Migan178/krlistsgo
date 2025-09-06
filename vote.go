@@ -15,10 +15,10 @@ func checkVote(c *http.Client, i *Identify, voteType, userID string) (data *Chec
 	var url string
 	if i == nil {
 		if voteType == "bots" {
-			return nil, BotIdentifyIsNil
+			return nil, ErrBotIdentifyIsNil
 		}
 
-		return nil, ServerIdentifyIsNil
+		return nil, ErrServerIdentifyIsNil
 	}
 
 	switch voteType {

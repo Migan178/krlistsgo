@@ -91,7 +91,9 @@ func (k *KrLists) Server(id string) (server *Server[User[string, string]], err e
 		}
 	}
 
-	resp, err := get(k.Client, EndpointServers(id), nil)
+	resp, err := get(k.Client, EndpointServers(id), &map[string]string{
+		"Authorization": k.ServerIdentify.Token,
+	})
 	if err != nil {
 		return
 	}

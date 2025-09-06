@@ -118,7 +118,9 @@ func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
 		}
 	}
 
-	resp, err := get(k.Client, EndpointBots(id), nil)
+	resp, err := get(k.Client, EndpointBots(id), &map[string]string{
+		"Authorization": k.BotIdentify.Token,
+	})
 	if err != nil {
 		return
 	}
@@ -144,7 +146,7 @@ func (k *KrLists) Bot(id string) (bot *Bot[User[string, string]], err error) {
 // UpdateServers는 해당 봇의 서버 수를 업데이트합니다.
 func (k *KrLists) UpdateServers(servers, shards int) error {
 	if k.BotIdentify == nil {
-		return BotIdentifyIsNil
+		return ErrBotIdentifyIsNil
 	}
 
 	body := map[string]int{

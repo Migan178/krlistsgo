@@ -3,9 +3,10 @@ package krlistsgo
 import "fmt"
 
 var (
-	ListLastPageErr       = fmt.Errorf("이 페이지가 마지막입니다.")
-	ListFirstPageErr      = fmt.Errorf("이 페이지가 가장 처음입니다.")
-	ListPositiveNumberErr = fmt.Errorf("page 인수의 값은 0보다 커야합니다.")
-	ServerIdentifyIsNil   = fmt.Errorf("해당 기능을 사용할려면 KrLists.SetServerIdentify로 자격 증명을 추가해야합니다.")
-	BotIdentifyIsNil      = fmt.Errorf("해당 기능을 사용할려면 KrLists.SetBotIdentify로 자격 증명을 추가해야합니다.")
+	ErrListLastPage            = fmt.Errorf("this page is the last")
+	ErrListFirstPage           = fmt.Errorf("this page is the first")
+	ErrListIsNotPositiveNumber = fmt.Errorf("a page argument value should bigger than 0")
+	ErrServerIdentifyIsNil     = fmt.Errorf("you should set your server's KrLists identify to use this endpoint")
+	ErrBotIdentifyIsNil        = fmt.Errorf("you should set your bot's KrLists identify to use this endpoint")
+	ErrAnyTokenIsNil           = fmt.Errorf("you should set any KrLists identify to use this endpoint")
 )
